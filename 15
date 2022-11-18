@@ -1,0 +1,161 @@
+CREATE TABLE Client_info( 
+
+    c_Id number PRIMARY KEY, 
+
+    client_name varchar2(20), 
+
+    adress varchar2(25), 
+
+    bal_due number(8) 
+
+)
+
+insert into Client_info 
+
+(c_Id , client_name,adress,bal_due ) 
+
+values 
+
+(1,'john','london',2000) 
+
+ 
+
+insert into Client_info 
+
+(c_Id , client_name,adress,bal_due ) 
+
+values 
+
+(2,'kylie','US',3000) 
+
+ 
+
+insert into Client_info 
+
+(c_Id , client_name,adress,bal_due ) 
+
+values 
+
+(3,'beck','phlips',25000)
+
+DECLARE 
+
+   c_id Client_info.id%type;  
+
+   client_name Client_info.Name%type;  
+
+   adress Client_info.address%type;   
+
+   bal_due Client_info.Number%type; 
+
+   -- user defined exception  
+
+   ex_invalid_bal_due  EXCEPTION;  
+
+BEGIN  
+
+   IF bal_due < 0 THEN  
+
+      RAISE ex_invalid_bal_due;  
+
+   ELSE  
+
+      SELECT  c_id,client_name,adress,bal_due 
+
+      From Client_info 
+
+    END IF; 
+
+ 
+
+EXCEPTION  
+
+   WHEN ex_invalid_bal_due THEN  
+
+      dbms_output.put_line('Bal Due Must Be Greater Than ZERO!'); 
+
+   WHEN no_data_found THEN  
+
+      dbms_output.put_line('No such client!');  
+
+   WHEN others THEN  
+
+      dbms_output.put_line('Error!');   
+
+END;
+
+create table borrower(rollno int primary key,name varchar(20),dateofissue date,nameofbook
+
+varchar(20),status varchar(20));
+
+create table fine(rollno int,foreign key(rollno) references borrower(rollno),returndate date,
+
+amount int);
+
+insert into borrower values(1,'abc','2021-06-01','SEPM','I');
+
+insert into borrower values(2,'xyz','2021-05-01','OOP','I');
+
+insert into borrower values(3,'pqr','2021-06-15','DBMS','I');
+
+insert into borrower values(4,'def','2021-06-30','DSA','I');
+
+insert into borrower values(5,'lmn','2021-07-05','ADS','I');
+
+select * from borrower;
+
+delimiter $
+
+create procedure calc_fine_lib(in roll int)
+
+begin
+
+declare fine1 int;
+
+declare noofdays int;
+
+declare issuedate date;
+
+declare exit handler for SQLEXCEPTION select 'create table definition';
+
+select dateofissue into issuedate from borrower where rollno=roll;
+
+select datediff(curdate(),issuedate) into noofdays;
+
+if noofdays>15 and noofdays<=30 then
+
+set fine1=noofdays*5;
+
+insert into fine values(roll,curdate(),fine1);
+
+elseif noofdays>30 then
+
+set fine1=((noofdays-30)*50) + 30*5;
+
+insert into fine values(roll,curdate(),fine1);
+
+else
+
+insert into fine values(roll,curdate(),0);
+
+end if;
+
+update borrower set status='R' where rollno=roll;
+
+end $
+
+delimiter ;
+
+call calc_fine_lib(1);
+
+call calc_fine_lib(2);
+
+call calc_fine_lib(3);
+
+call calc_fine_lib(4);
+
+call calc_fine_lib(5);
+
+select * from fine;
+
+drop database library;
