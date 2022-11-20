@@ -1,72 +1,108 @@
-1. Create a db called company consist of the following tables.
-1.Emp (eno,ename, job,hiredate,salary,commission,deptno,) 
-2.dept(deptno,deptname,location) 
-eno is primary key in emp 
-deptno is primary key in dept 
-create table Emp(eno int(10),ename varchar(10),job varchar(10), hiredate date,salary varchar(10),commision varchar(10),deptno varchar(20));
-create table dept(deptno varchar(20),deptname varchar(20),location varchar(20));
-ALTER TABLE Emp ADD PRIMARY KEY (eno);
-ALTER TABLE dept ADD PRIMARY KEY (deptno);
-
-insert into Emp(eno,ename,job,hiredate,salary,commision,deptno) values (01,'ABC','manager',2022/01/02,'5000','2000','10');
-insert into Emp(eno,ename,job,hiredate,salary,commision,deptno) values (02,'PQR','salesman',2022/01/02,'1001','500','20');
-insert into Emp(eno,ename,job,hiredate,salary,commision,deptno) values (03,'XYZ','manager',2022/01/02,'1000','2500','10');
-insert into Emp(eno,ename,job,hiredate,salary,commision,deptno) values (04,'LMN','salesman',2022/01/02,'500','2500','20');
-insert into dept (deptno,deptname,location) values ('10','production','Pune');
-insert into dept (deptno,deptname,location) values ('20','Marketing','Mumbai');
-
-
-
-
-
-
-
-Solve Queries by SQL
-
- 1. List the maximum salary paid to salesman
-
-SELECT MAX(salary)FROM Emp where job = 'salesman' ;
-
- 2. List name of emp whose name start with ‘I’ 
-
-select * from Emp where ename like 'I%'
-
-3. List details of emp who have joined before ’30-sept-81’ 
-
-select * from Emp where hiredate < 30/09/1981;
-
-4. List the emp details in the descending order of their basic salary 
-
-select * from Emp order by salary desc;
-
-5. List of no. of emp & avg salary for emp in the dept no ‘20’ 
-
-SELECT COUNT(ename)from Emp;
-
-SELECT AVG(salary)from Emp where deptno = '20'
-
-6. List the avg salary, minimum salary of the emp hiredatewise for dept no ‘10’. 
-
-SELECT AVG(salary) from Emp where deptno = '10' ;
-
-SELECT MIN(salary) from Emp where deptno = '10' ;
-
-7. List emp name and its department 
-
-select Emp.ename,dept.deptno from Emp inner join dept on Emp.deptno = dept.deptno;
-
-8. List total salary paid to each department 
-
-SELECT SUM(salary) from Emp where deptno = '10';
-
-SELECT SUM(salary) from Emp where deptno = '20';
-
-9. List details of employee working in ‘Dev’ department 
-
-SELECT Emp.ename, dept.deptname from Emp inner join dept on Emp.deptno = dept. deptno where deptname = 'Dev';
-
-10. Update salary of all employees in deptno 10 by 5 %.
-
-update Emp set salary = salary + 5 where deptno = '10';
-
-select * from Emp;
+import java.io.*;
+class P1
+{
+public static void main(String ar[])throws IOException
+{
+BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
+int i;
+String a[][]={{"","START","101",""},
+ {"","MOVER","BREG","ONE"},
+ {"AGAIN","MULT","BREG","TERM"},
+ {"","MOVER","CREG","TERM"},
+ {"","ADD","CREG","N"},
+ {"","MOVEM","CREG","TERM"},
+ {"N","DS","2",""},
+ {"RESULT","DS","2",""},
+ {"ONE","DC","1",""},
+ {"TERM","DS","1",""},
+ {"","END","",""}};
+int lc=Integer.parseInt(a[0][2]);
+String st[][]=new String[5][2];
+int cnt=0,l;
+for (i=1;i<11;i++)
+{
+if (a[i][0]!="")
+{
+st [cnt][0]=a[i][0];
+st[cnt][1]=Integer.toString(lc);
+cnt++;
+if(a[i][1]=="DS")
+{
+int d=Integer.parseInt(a[i][2]);
+lc=lc+d;
+}
+else
+{
+lc++;
+}
+}
+else
+{
+lc++;
+}
+}
+System.out.print("***SYMBOL TABLE****\n");
+System.out.println("_____________________");
+for(i=0;i<5;i++)
+{
+for(cnt=0;cnt<2;cnt++)
+{
+System.out.print(st[i][cnt]+"\t");
+}
+System.out.println();
+}
+String 
+inst[]={"STOP","ADD","SUB","MULT","MOVER","MOVEM","COMP","BC","DIV","READ","PRINT"};
+String reg[]={"NULL","AREG","BREG","CREG","DREG"};
+int op[][]=new int[12][3];
+int j,k,p=1,cnt1=0;
+for(i=1;i<11;i++)
+{
+for(j=0;j<11;j++)
+{
+if(a[i][1].equalsIgnoreCase(inst[j]))
+{
+op[cnt1][0]=j;
+}
+else
+if(a[i][1].equalsIgnoreCase("DS"))
+{
+p=Integer.parseInt(a[i][2]);
+}
+else if(a[i][1].equalsIgnoreCase("DC"))
+{
+op[cnt1][2]=Integer.parseInt(a[i][2]);
+}
+}
+for(k=0;k<5;k++)
+{
+if(a[i][2].equalsIgnoreCase(reg[k]))
+{
+op[cnt1][1]=k;
+}
+}
+for(l=0;l<5;l++)
+{
+if(a[i][3].equalsIgnoreCase(st[l][0]))
+{
+int mn=Integer.parseInt(st[l][1]);
+op[cnt1][2]=mn;
+}
+}
+cnt1=cnt1+p;
+}
+System.out.println("\n *****OUTPUT*****\n");
+System.out.println("**********MOT TABLE**********");
+int dlc=Integer.parseInt(a[0][2]);
+for(i=0;i<12;i++)
+{
+System.out.print(dlc+++"\t");
+for(j=0;j<3;j++)
+{
+System.out.print(" "+op[i][j]+" ");
+}
+System.out.println();
+}
+System.out.println("");
+}
+}
